@@ -8,28 +8,29 @@ import java.util.Vector;
 /**
  * Created by mrcai on 2016/1/5.
  */
-public  class readfile {
+public  class Readfile {
     Vector<Item> list;
     Item curItem=new Item();
     final int  LISTSIZE=128;
-    public void readfile() {
-        list = new Vector<Item>();
+
+    public void Readfile() {
+        list = new Vector<>();
         list.clear();
     }
 
     public int readRequirement(String filePath) {
         try {
 
-            String encoding = "GBK";
+           // String encoding = "GBK";
             File file = new File(filePath);
             if (file.isFile() && file.exists()) { //判断文件是否存在
                 InputStreamReader read = new InputStreamReader(
                         new FileInputStream(file), "utf-8");//考虑到编码格式
                 BufferedReader bufferedReader = new BufferedReader(read);
-                String lineTxt = null;
+                String lineTxt;
                 while ((lineTxt = bufferedReader.readLine()) != null) {
                     //System.out.println(lineTxt);
-                    OUTLIST(lineTxt);
+                    Outlist(lineTxt);
                 }
                 read.close();
             } else {
@@ -43,7 +44,7 @@ public  class readfile {
         }
         return 0;
     }
-    public void  OUTLIST(String lineTxt){
+    public void  Outlist(String lineTxt){
         if(lineTxt.indexOf("[")!=-1){
             System.out.println("***日乐购 POS系统 购物清单***");
         }

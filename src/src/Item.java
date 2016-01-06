@@ -2,6 +2,7 @@
  * Created by mrcai on 2016/1/5.
  */
 public class Item {
+    String barcode;
     String name;
     String unit;
     double price;
@@ -9,13 +10,15 @@ public class Item {
     int number;
 
     Item(){
+        barcode="NULL";
         name="NULL";
         unit = "NNNN";
         price = 0;
         number = 1;
         discount = 0;
     }
-    Item(String n,String u,double p,double d){
+    Item(String b,String n,String u,double p,double d){
+        barcode=b;
         name=n;
         unit = u;
         price = p;
