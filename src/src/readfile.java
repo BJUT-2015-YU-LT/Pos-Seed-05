@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.Vector;
 
 /**
@@ -13,6 +14,7 @@ public  class readfile {
     Vector<Item> list;
     Item curItem;
     int cur;
+    DecimalFormat df =new DecimalFormat("0.00");
     final int  LISTSIZE=128;
     readfile() {
         list = new Vector();
@@ -64,9 +66,17 @@ public  class readfile {
             //System.out.println(lineTxt);
             return;
         }
+
         if(lineTxt.indexOf("price:")!=-1){
             String[] strArray  = lineTxt.split(":");
                 curItem.price=Double.parseDouble(strArray[1]);
+            //curItem.price=1;
+            //System.out.println(lineTxt);
+            return;
+        }
+        if(lineTxt.indexOf("discount:")!=-1){
+            String[] strArray  = lineTxt.split(":");
+            curItem.discount=Double.parseDouble(strArray[1]);
             //curItem.price=1;
             //System.out.println(lineTxt);
             return;
@@ -103,16 +113,26 @@ public  class readfile {
             }
             System.out.println("----------------------");
             System.out.println("总计"+Total()+"（元）");
+            System.out.println("节省"+Save()+"（元）");
             System.out.println("**********************");
             return;
         }
     }
-    public double Total(){
+    public String Total(){
+
         double sum=0;
         for(int i=0;i<list.size();i++)
         {
             sum+=list.elementAt(i).subTotal();
         }
-        return  sum;
+        return  df.format(sum);
+    }
+    public String Save(){
+        double sv=0;
+        for(int i=0;i<list.size();i++)
+        {
+            sv+=list.elementAt(i).subSave();
+        }
+        return  df.format(sv);
     }
 }

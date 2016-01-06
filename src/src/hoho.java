@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 public class hoho {
     public static void main(String argvs[]) {
         readfile R = new readfile();
-        R.readRequirement("requirement1.txt");
+        R.readRequirement("requirement2.txt");
     }
 }
 
