@@ -1,4 +1,3 @@
-import com.sun.org.apache.xerces.internal.impl.io.UTF8Reader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -46,7 +45,7 @@ public  class readfile {
     }
     public void  OUTLIST(String lineTxt){
         if(lineTxt.indexOf("[")!=-1){
-            System.out.println("***商店购物清单***");
+            System.out.println("***日乐购 POS系统 购物清单***");
         }
         if(lineTxt.indexOf("{")!=-1){
             //curItem=new Item();
@@ -65,13 +64,19 @@ public  class readfile {
             //curItem.price=1;
             //System.out.println(lineTxt);
         }
+        if(lineTxt.indexOf("discount:")!=-1){
+            String[] strArray  = lineTxt.split(":");
+            curItem.discount=Double.parseDouble(strArray[1]);
+            //curItem.price=1;
+            //System.out.println(lineTxt);
+        }
         if(lineTxt.indexOf("name:")!=-1){
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
             curItem.name=strArray[1];
             //System.out.println(lineTxt);
         }
-        if(lineTxt.indexOf("},")!=-1) {
+        if(lineTxt.indexOf("}")!=-1) {
             //list.addElement(curItem);
             System.out.println(curItem.toString());
             //System.out.printf("\n");
