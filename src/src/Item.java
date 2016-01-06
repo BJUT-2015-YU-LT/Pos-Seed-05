@@ -10,7 +10,7 @@ public class Item {
         name="NULL";
         unit = "NNNN";
         price = 0;
-        number = 0;
+        number = 1;
     }
     Item(    String n,  String u, double p){
         name=n;
