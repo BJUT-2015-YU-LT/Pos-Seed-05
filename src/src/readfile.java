@@ -11,11 +11,14 @@ import java.util.Vector;
  */
 public  class readfile {
     Vector<Item> list;
-    Item curItem=new Item();
+    Item curItem;
+    int cur;
     final int  LISTSIZE=128;
-    public void readfile() {
-        list = new Vector<Item>();
+    readfile() {
+        list = new Vector();
         list.clear();
+        curItem=new Item();
+        cur=0;
     }
 
     public int readRequirement(String filePath) {
@@ -29,7 +32,6 @@ public  class readfile {
                 BufferedReader bufferedReader = new BufferedReader(read);
                 String lineTxt = null;
                 while ((lineTxt = bufferedReader.readLine()) != null) {
-                    //System.out.println(lineTxt);
                     OUTLIST(lineTxt);
                 }
                 read.close();
@@ -47,44 +49,70 @@ public  class readfile {
     public void  OUTLIST(String lineTxt){
         if(lineTxt.indexOf("[")!=-1){
             System.out.println("***商店购物清单***");
+            return;
         }
+
         if(lineTxt.indexOf("{")!=-1){
-            //curItem=new Item();
-            //System.out.printf("名称");
+            curItem=new Item();cur++;
             //System.out.println(lineTxt);
+            return;
         }
         if(lineTxt.indexOf("unit:")!=-1){
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
                 curItem.unit=strArray[1];
             //System.out.println(lineTxt);
+            return;
         }
         if(lineTxt.indexOf("price:")!=-1){
             String[] strArray  = lineTxt.split(":");
                 curItem.price=Double.parseDouble(strArray[1]);
             //curItem.price=1;
             //System.out.println(lineTxt);
+            return;
         }
         if(lineTxt.indexOf("name:")!=-1){
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
             curItem.name=strArray[1];
             //System.out.println(lineTxt);
+            return;
         }
-        if(lineTxt.indexOf("},")!=-1) {
-            //list.addElement(curItem);
-            System.out.println(curItem.toString());
+        if(lineTxt.indexOf("barcode:")!=-1){
+            String[] strArray  = lineTxt.split("'");
+            if(strArray[1]!=null)
+                curItem.barcode=strArray[1];
+            //System.out.println(lineTxt);
+            return;
+        }
+        if(lineTxt.indexOf("}")!=-1) {
+            for(int i=0;i<list.size();i++)
+            {
+                if(curItem.name.equals(list.elementAt(i).name)){
+                    list.elementAt(i).number++;return;}
+            }
+            list.add(curItem);return;
+            //System.out.println(curItem.toString());
             //System.out.printf("\n");
             //System.out.println(lineTxt);
         }
         if(lineTxt.indexOf("]")!=-1){
-//            for(int i=0;i<list.size();i++)
-//            {
-//                System.out.println(curItem.toString());
-//            }
+            for(int i=0;i<list.size();i++)
+            {
+                System.out.println(list.elementAt(i).toString());
+            }
             System.out.println("----------------------");
-            System.out.println("总计"+0+"（元）");
+            System.out.println("总计"+Total()+"（元）");
             System.out.println("**********************");
+            return;
         }
+    }
+    public double Total(){
+        double sum=0;
+        for(int i=0;i<list.size();i++)
+        {
+            sum+=list.elementAt(i).subTotal();
+        }
+        return  sum;
     }
 }
