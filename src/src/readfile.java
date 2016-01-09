@@ -13,6 +13,7 @@ import java.util.Vector;
 public  class readfile {
     Vector<Item> list;
     Vector<Item> index;
+    Vector<Item> promotion;
     Item curItem;
     int cur;
     DecimalFormat df =new DecimalFormat("0.00");
@@ -20,8 +21,10 @@ public  class readfile {
     readfile() {
         list = new Vector();
         index = new Vector();
+        promotion = new Vector();
         list.clear();
         index.clear();
+        promotion.clear();
         curItem=new Item();
         cur=0;
     }
@@ -42,8 +45,9 @@ public  class readfile {
 //                        case "list": OUTLIST(lineTxt);break;
 //                        default:return 4;
 //                    }
-                    if(isIndex.equals("index")) outindex(lineTxt);
-                    else if(isIndex.equals("list"))  OUTLIST(lineTxt);
+                    if(isIndex.equals("index")) OutIndex(lineTxt);
+                    else if(isIndex.equals("list"))  OutList(lineTxt);
+                    //else if(isIndex.equals("promotion")) OutPromotion(lineTxt);
                 }
                 read.close();
             } else {
@@ -57,7 +61,7 @@ public  class readfile {
         }
         return 0;
     }
-    public void  OUTLIST(String lineTxt){
+    public void  OutList(String lineTxt){
 
         if(lineTxt.indexOf("[")!=-1){
             System.out.println("***商店购物清单***");
@@ -102,13 +106,20 @@ public  class readfile {
                 System.out.println(list.elementAt(i).toString());
             }
             System.out.println("----------------------");
-            System.out.println("总计"+Total()+"（元）");
-            System.out.println("节省"+Save()+"（元）");
+            System.out.println("挥泪赠送商品：");
+            for(int i=0;i<list.size();i++)
+            {
+                if (list.elementAt(i).promotion)
+                System.out.println(list.elementAt(i).toString3());
+            }
+            System.out.println("----------------------");
+            System.out.println("总计" + df.format(Total() - Save())+"（元）");
+            System.out.println("节省"+df.format(Save())+"（元）");
             System.out.println("**********************");
             return;
         }
     }
-    public void  outindex(String lineTxt){
+    public void  OutIndex(String lineTxt){
         if(lineTxt.indexOf("[")!=-1){
             System.out.println("***商品目录***");
             return;
@@ -124,7 +135,8 @@ public  class readfile {
 
         if(lineTxt.indexOf("price:")!=-1){
             String[] strArray  = lineTxt.split(":");
-            curItem.price=Double.parseDouble(strArray[1]);
+            String[] subArray =  strArray[1].split(",");
+            curItem.price=Double.parseDouble(subArray[0]);
             //curItem.price=1;
             //System.out.println(lineTxt);
             return;
@@ -143,12 +155,16 @@ public  class readfile {
             //System.out.println(lineTxt);
             return;
         }
+        if(lineTxt.indexOf("promotion:")!=-1&&lineTxt.indexOf("true")!=-1){
+           curItem.promotion=true;
+            //System.out.println(lineTxt);
+            return;
+        }
         if(lineTxt.indexOf("{")!=-1){
             curItem=new Item();cur++;
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
                 curItem.barcode=strArray[1];
-
             return;
         }
         if(lineTxt.indexOf("}")!=-1) {
@@ -162,28 +178,26 @@ public  class readfile {
             {
                 System.out.println(index.elementAt(i).toString2());
             }
-//            System.out.println("----------------------");
             System.out.println("总计 "+cur+" （种）");
-//            System.out.println("节省"+Save()+"（元）");
             System.out.println("**********************");
             return;
         }
     }
-    public String Total(){
+    public Double Total(){
 
         double sum=0;
         for(int i=0;i<list.size();i++)
         {
             sum+=list.elementAt(i).subTotal();
         }
-        return  df.format(sum);
+        return  sum;
     }
-    public String Save(){
+    public Double Save(){
         double sv=0;
         for(int i=0;i<list.size();i++)
         {
             sv+=list.elementAt(i).subSave();
         }
-        return  df.format(sv);
+        return  sv;
     }
 }
