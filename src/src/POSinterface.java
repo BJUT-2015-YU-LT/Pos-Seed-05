@@ -48,6 +48,8 @@ public class POSinterface implements ActionListener{
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pane.add("Panel1",con);
+        text1.setText("请选择文件");
+        text2.setText("请选择文件");
     }
     public void actionPerformed(ActionEvent e){
         if(e.getSource().equals(button1))
@@ -74,12 +76,21 @@ public class POSinterface implements ActionListener{
         }
         if(e.getSource().equals(button3))
         {
-            Readfile r = new Readfile();
-            r.readRequirement(text1.getText());
-            /**
-             * 暂时只实装了购物清单
-             * 商店列表暂时还没有
-             */
+            if(text1.getText()!="请选择文件"&&text2.getText()!="请选择文件")
+            {
+                Readfile r = new Readfile();
+                r.readInventory(text2.getText());
+                if(r.readShoplist(text1.getText())!=0){
+                    System.out.println("#购物清单有语法错误，无效输入，请检查！#");
+                    return;
+                }
+
+            }
+            else {
+                System.out.println("请选择文件！");
+                return; //没有选择文件
+            }
+
         }
     }
 }
