@@ -21,6 +21,7 @@ public class Item {
         unit = "NNNN";
         price = 0;
         number = 1;
+        barcode=null;
         discount=1;
     }
     Item(    String n,  String u, double p){
@@ -29,6 +30,7 @@ public class Item {
         price = p;
         number = 1;
         discount=1;
+        barcode=null;
     }
     Item(Item i){
         name=i.name;
@@ -41,5 +43,8 @@ public class Item {
     @Override
     public String toString() {
         return "名称："+name+",数量："+number+unit+",单价："+price+"（元），小计："+df.format(subTotal())+"（元）" ;
+    }
+    public String toString2() {
+        return "Barcode:"+barcode+" 名称："+name+",数量："+number+unit+",单价："+price+"（元），小计："+df.format(subTotal())+"（元）" ;
     }
 }

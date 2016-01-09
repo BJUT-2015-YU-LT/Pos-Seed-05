@@ -12,18 +12,21 @@ import java.util.Vector;
  */
 public  class readfile {
     Vector<Item> list;
+    Vector<Item> index;
     Item curItem;
     int cur;
     DecimalFormat df =new DecimalFormat("0.00");
     final int  LISTSIZE=128;
     readfile() {
         list = new Vector();
+        index = new Vector();
         list.clear();
+        index.clear();
         curItem=new Item();
         cur=0;
     }
 
-    public int readRequirement(String filePath) {
+    public int readRequirement(String filePath,String isIndex) {
         try {
 
             String encoding = "GBK";
@@ -34,7 +37,13 @@ public  class readfile {
                 BufferedReader bufferedReader = new BufferedReader(read);
                 String lineTxt = null;
                 while ((lineTxt = bufferedReader.readLine()) != null) {
-                    OUTLIST(lineTxt);
+//                    switch (isIndex){
+//                        case "index":outindex(lineTxt);break;
+//                        case "list": OUTLIST(lineTxt);break;
+//                        default:return 4;
+//                    }
+                    if(isIndex.equals("index")) outindex(lineTxt);
+                    else if(isIndex.equals("list"))  OUTLIST(lineTxt);
                 }
                 read.close();
             } else {
@@ -49,16 +58,62 @@ public  class readfile {
         return 0;
     }
     public void  OUTLIST(String lineTxt){
+
         if(lineTxt.indexOf("[")!=-1){
             System.out.println("***商店购物清单***");
+
+            return;
+        }
+        if(lineTxt.indexOf("ITEM")!=-1){
+            curItem=new Item();
+            //System.out.println(lineTxt);
+            //System.out.println("index:"+index.elementAt(2).toString2());
+            String[] strArray  = lineTxt.split("'");
+            if(strArray[1]!=null)
+                curItem.barcode=strArray[1];
+            for(int i=0;i<index.size();i++)
+            {
+                //System.out.println("curItem:"+curItem.barcode+"\t"+"index:"+index.elementAt(i).barcode);
+                if(curItem.barcode.equals(index.elementAt(i).barcode))
+                {
+                    //System.out.println("curItem:"+curItem.toString2()+"\n"+index.elementAt(i).toString2()+"\n");
+                    for(int j=0;j<list.size();j++)
+                    {
+                        if(curItem.barcode.equals(list.elementAt(j).barcode))
+                        {
+                            list.elementAt(j).number++;
+                            return;
+                        }
+                    }
+                    curItem=new Item(index.elementAt(i));
+                    list.add(curItem);
+                    //System.out.println("curItem++++:"+curItem.toString());
+                    return;
+                }
+            }
+            System.out.println("Not found:"+curItem.toString2());
+
             return;
         }
 
-        if(lineTxt.indexOf("{")!=-1){
-            curItem=new Item();cur++;
-            //System.out.println(lineTxt);
+        if(lineTxt.indexOf("]")!=-1){
+            for(int i=0;i<list.size();i++)
+            {
+                System.out.println(list.elementAt(i).toString());
+            }
+            System.out.println("----------------------");
+            System.out.println("总计"+Total()+"（元）");
+            System.out.println("节省"+Save()+"（元）");
+            System.out.println("**********************");
             return;
         }
+    }
+    public void  outindex(String lineTxt){
+        if(lineTxt.indexOf("[")!=-1){
+            System.out.println("***商品目录***");
+            return;
+        }
+
         if(lineTxt.indexOf("unit:")!=-1){
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
@@ -69,7 +124,7 @@ public  class readfile {
 
         if(lineTxt.indexOf("price:")!=-1){
             String[] strArray  = lineTxt.split(":");
-                curItem.price=Double.parseDouble(strArray[1]);
+            curItem.price=Double.parseDouble(strArray[1]);
             //curItem.price=1;
             //System.out.println(lineTxt);
             return;
@@ -84,36 +139,32 @@ public  class readfile {
         if(lineTxt.indexOf("name:")!=-1){
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
-            curItem.name=strArray[1];
+                curItem.name=strArray[1];
             //System.out.println(lineTxt);
             return;
         }
-        if(lineTxt.indexOf("barcode:")!=-1){
+        if(lineTxt.indexOf("{")!=-1){
+            curItem=new Item();cur++;
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
                 curItem.barcode=strArray[1];
-            //System.out.println(lineTxt);
+
             return;
         }
         if(lineTxt.indexOf("}")!=-1) {
-            for(int i=0;i<list.size();i++)
-            {
-                if(curItem.name.equals(list.elementAt(i).name)){
-                    list.elementAt(i).number++;return;}
-            }
-            list.add(curItem);return;
+            index.add(curItem);return;
             //System.out.println(curItem.toString());
             //System.out.printf("\n");
             //System.out.println(lineTxt);
         }
         if(lineTxt.indexOf("]")!=-1){
-            for(int i=0;i<list.size();i++)
+            for(int i=0;i<index.size();i++)
             {
-                System.out.println(list.elementAt(i).toString());
+                System.out.println(index.elementAt(i).toString2());
             }
-            System.out.println("----------------------");
-            System.out.println("总计"+Total()+"（元）");
-            System.out.println("节省"+Save()+"（元）");
+//            System.out.println("----------------------");
+            System.out.println("总计 "+cur+" （种）");
+//            System.out.println("节省"+Save()+"（元）");
             System.out.println("**********************");
             return;
         }
