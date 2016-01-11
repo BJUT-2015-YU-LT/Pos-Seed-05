@@ -4,62 +4,47 @@
         name: '可口可乐',
         unit: '瓶',
         price: 3.00
-        discount: 0.00
     },
     {
         barcode: 'ITEM000000',
         name: '可口可乐',
         unit: '瓶',
         price: 3.00
-        discount: 0.00
     },
     {
         barcode: 'ITEM000000',
         name: '可口可乐',
         unit: '瓶',
         price: 3.00
-        discount: 0.00
     },
     {
         barcode: 'ITEM000000',
         name: '可口可乐',
         unit: '瓶',
         price: 3.00
-        discount: 0.00
     },
     {
         barcode: 'ITEM000000',
         name: '可口可乐',
         unit: '瓶',
         price: 3.00
-        discount: 0.00
     },
     {
         barcode: 'ITEM000001',
         name: '雪碧',
         unit: '瓶',
         price: 3.00
-        discount: 0.00
     },
     {
         barcode: 'ITEM000001',
         name: '雪碧',
         unit: '瓶',
         price: 3.00
-        discount: 0.00
     },
     {
         barcode: 'ITEM000004',
         name: '电池',
         unit: '个',
         price: 2.00
-        discount: 0.40
-    },
-    {
-            barcode: 'ITEM000003',
-            name: '大卫龙',
-            unit: '包',
-            price: 3.50
-            discount: 0.20
-    },
+    }
 ]
