@@ -12,7 +12,7 @@ public class Item {
     double discount;
     boolean promotion;
     double subTotal(){
-       return price *number;
+       return price *number*(discount);
     }
     double subSave(){
         if(promotion){return (number/3)*price+price *number*(1-discount);}

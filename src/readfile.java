@@ -96,7 +96,6 @@ public  class readfile {
                 }
             }
             System.out.println("Not found:"+curItem.toString2());
-
             return;
         }
 
