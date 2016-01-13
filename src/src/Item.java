@@ -61,7 +61,7 @@ public class Item {
         return "名称："+name+",\t数量："+number+unit+",单价："+df.format(price)+"（元），小计："+df.format(subTotalforVip())+"（元）" ;
     }
     public String toString2() {//目录
-        return "Barcode:"+barcode+" 名称："+name+",\t数量："+number+unit+",单价："+df.format(price)+"（元），小计："+df.format(subTotal())+"（元）"+"活动："+promotion ;
+        return "Barcode:"+barcode+"\t名称："+name+",\t数量："+number+unit+",\t单价："+df.format(price)+"元\t小计："+df.format(subTotal())+"元"+"\t会员价："+df.format(subTotalforVip())+"元"+"\t活动："+promotion ;
     }
 
     public String toString3() {//挥泪赠送

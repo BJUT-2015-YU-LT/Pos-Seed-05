@@ -78,15 +78,16 @@ public  class readfile {
         }
         if(lineTxt.indexOf("user")!=-1){
             currentUser=new User();
+            String ccc=null;
             String[] strArray  = lineTxt.split("'");
-            if(strArray[3]!=null) currentUser.code= strArray[3];
+            if(strArray[3]!=null) ccc= strArray[3];
             for(int i =0;i<users.size();i++){
-                if(currentUser.code.equals(users.elementAt(i).code)) {
-                    currentUser.isVip = users.elementAt(i).isVip;
-                    currentUser.name = users.elementAt(i).name;
+                if(ccc.equals(users.elementAt(i).code)) {
+                    currentUser = new User(users.elementAt(i));break;
                 }
             }
-            System.out.println(currentUser);
+            if(currentUser.isVip)System.out.printf("会员编号：%s\t 会员积分：%d 分\n",currentUser.code,currentUser.integral);
+            else System.out.println("当前为非会员");
         }
         if(lineTxt.indexOf("ITEM")!=-1){
             curItem=new Item();
@@ -135,6 +136,7 @@ public  class readfile {
             System.out.println("总计" + df.format(Total() - Save())+"（元）");
             System.out.println("节省"+df.format(Save())+"（元）");
             System.out.println("**********************");
+            currentUser.AddIntegral((int)(Total() - Save()));
             return;
         }
     }
@@ -184,7 +186,9 @@ public  class readfile {
             return;
         }
         if(lineTxt.indexOf("promotion")!=-1&&lineTxt.indexOf("true")!=-1){
-           curItem.promotion=true;
+            if(curItem.vipDiscount==1)//会员商品不参与活动
+           curItem.promotion=false;
+            else curItem.promotion =true;
             //System.out.println(lineTxt);
             return;
         }
@@ -203,6 +207,7 @@ public  class readfile {
             }
             System.out.println("总计 "+cur+" （种）");
             System.out.println("**********************");
+
             return;
         }
     }
@@ -220,6 +225,8 @@ public  class readfile {
         if(lineTxt.indexOf("name")!=-1){
             String[] strArray  = lineTxt.split("'");
             curUser.name =strArray[1];
+            String[] strintegral =  strArray[2].split(",");
+            curUser.integral = Integer.parseInt(strintegral[1]);
         }
         if(lineTxt.indexOf("isVip")!=-1){
             if(lineTxt.indexOf("true")!=-1)       curUser.isVip =true;
