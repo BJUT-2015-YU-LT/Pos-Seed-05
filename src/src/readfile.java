@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -14,6 +16,9 @@ public  class readfile {
     Vector<Item> list;
     Vector<Item> index;
     Vector<Item> promotion;
+    Vector<User>  users;
+    User curUser;
+    User currentUser;
     Item curItem;
     int cur;
     DecimalFormat df =new DecimalFormat("0.00");
@@ -22,10 +27,14 @@ public  class readfile {
         list = new Vector();
         index = new Vector();
         promotion = new Vector();
+        users = new Vector();
         list.clear();
         index.clear();
         promotion.clear();
+        users.clear();
         curItem=new Item();
+        curUser = new User();
+        currentUser = new User();
         cur=0;
     }
 
@@ -40,14 +49,9 @@ public  class readfile {
                 BufferedReader bufferedReader = new BufferedReader(read);
                 String lineTxt = null;
                 while ((lineTxt = bufferedReader.readLine()) != null) {
-//                    switch (isIndex){
-//                        case "index":outindex(lineTxt);break;
-//                        case "list": OUTLIST(lineTxt);break;
-//                        default:return 4;
-//                    }
                     if(isIndex.equals("index")) OutIndex(lineTxt);
                     else if(isIndex.equals("list"))  OutList(lineTxt);
-                    //else if(isIndex.equals("promotion")) OutPromotion(lineTxt);
+                    else if(isIndex.equals("vipList")) OutVipList(lineTxt);
                 }
                 read.close();
             } else {
@@ -63,15 +67,29 @@ public  class readfile {
     }
     public void  OutList(String lineTxt){
 
-        if(lineTxt.indexOf("[")!=-1){
+        if(lineTxt.equals("{")){
             System.out.println("***商店购物清单***");
-
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");//可以方便地修改日期格式
+            String tt = dateFormat.format( now );
+            System.out.printf("打印时间：%s\n",tt);
+            System.out.println("----------------------");
             return;
+        }
+        if(lineTxt.indexOf("user")!=-1){
+            currentUser=new User();
+            String[] strArray  = lineTxt.split("'");
+            if(strArray[3]!=null) currentUser.code= strArray[3];
+            for(int i =0;i<users.size();i++){
+                if(currentUser.code.equals(users.elementAt(i).code)) {
+                    currentUser.isVip = users.elementAt(i).isVip;
+                    currentUser.name = users.elementAt(i).name;
+                }
+            }
+            System.out.println(currentUser);
         }
         if(lineTxt.indexOf("ITEM")!=-1){
             curItem=new Item();
-            //System.out.println(lineTxt);
-            //System.out.println("index:"+index.elementAt(2).toString2());
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
                 curItem.barcode=strArray[1];
@@ -103,7 +121,8 @@ public  class readfile {
         if(lineTxt.indexOf("]")!=-1){
             for(int i=0;i<list.size();i++)
             {
-                System.out.println(list.elementAt(i).toString());
+                if(currentUser.isVip)  System.out.println(list.elementAt(i).toStringforVip());
+                else System.out.println(list.elementAt(i).toString());
             }
             System.out.println("----------------------");
             System.out.println("挥泪赠送商品：");
@@ -120,20 +139,20 @@ public  class readfile {
         }
     }
     public void  OutIndex(String lineTxt){
-        if(lineTxt.indexOf("[")!=-1){
+        if(lineTxt.equals("{")){
             System.out.println("***商品目录***");
             return;
         }
 
-        if(lineTxt.indexOf("unit:")!=-1){
+        if(lineTxt.indexOf("unit")!=-1){
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
-                curItem.unit=strArray[1];
+                curItem.unit=strArray[3];
             //System.out.println(lineTxt);
             return;
         }
 
-        if(lineTxt.indexOf("price:")!=-1){
+        if(lineTxt.indexOf("price")!=-1){
             String[] strArray  = lineTxt.split(":");
             String[] subArray =  strArray[1].split(",");
             curItem.price=Double.parseDouble(subArray[0]);
@@ -141,39 +160,43 @@ public  class readfile {
             //System.out.println(lineTxt);
             return;
         }
-        if(lineTxt.indexOf("discount:")!=-1){
+        if(lineTxt.indexOf("discount")!=-1){
             String[] strArray  = lineTxt.split(":");
-            curItem.discount=Double.parseDouble(strArray[1]);
+            String[] subArray =  strArray[1].split(",");
+            curItem.discount=Double.parseDouble(subArray[0]);
             //curItem.price=1;
             //System.out.println(lineTxt);
             return;
         }
-        if(lineTxt.indexOf("name:")!=-1){
-            String[] strArray  = lineTxt.split("'");
-            if(strArray[1]!=null)
-                curItem.name=strArray[1];
+        if(lineTxt.indexOf("vipDiscount")!=-1){
+            String[] strArray  = lineTxt.split(":");
+            String[] subArray =  strArray[1].split(",");
+            curItem.vipDiscount=Double.parseDouble(subArray[0]);
+            //curItem.price=1;
             //System.out.println(lineTxt);
             return;
         }
-        if(lineTxt.indexOf("promotion:")!=-1&&lineTxt.indexOf("true")!=-1){
+        if(lineTxt.indexOf("name")!=-1){
+            String[] strArray  = lineTxt.split("'");
+            if(strArray[3]!=null)
+                curItem.name=strArray[3];
+            //System.out.println(lineTxt);
+            return;
+        }
+        if(lineTxt.indexOf("promotion")!=-1&&lineTxt.indexOf("true")!=-1){
            curItem.promotion=true;
             //System.out.println(lineTxt);
             return;
         }
-        if(lineTxt.indexOf("{")!=-1){
+        if(lineTxt.indexOf("{")!=-1&&lineTxt.indexOf("ITEM")!=-1){
             curItem=new Item();cur++;
+            index.add(curItem);
             String[] strArray  = lineTxt.split("'");
             if(strArray[1]!=null)
                 curItem.barcode=strArray[1];
             return;
         }
-        if(lineTxt.indexOf("}")!=-1) {
-            index.add(curItem);return;
-            //System.out.println(curItem.toString());
-            //System.out.printf("\n");
-            //System.out.println(lineTxt);
-        }
-        if(lineTxt.indexOf("]")!=-1){
+        if(lineTxt.equals("}")){
             for(int i=0;i<index.size();i++)
             {
                 System.out.println(index.elementAt(i).toString2());
@@ -183,12 +206,39 @@ public  class readfile {
             return;
         }
     }
+    public void OutVipList(String lineTxt){
+            if(lineTxt.indexOf("USER")==-1&&lineTxt.indexOf("{")!=-1){
+            System.out.println("***Vip index***");
+            return;
+        }
+        if(lineTxt.indexOf("USER")!=-1&&lineTxt.indexOf("{")!=-1){
+            curUser = new User();
+            String[] strArray  = lineTxt.split("'");
+            curUser.code =strArray[1];
+            return;
+        }
+        if(lineTxt.indexOf("name")!=-1){
+            String[] strArray  = lineTxt.split("'");
+            curUser.name =strArray[1];
+        }
+        if(lineTxt.indexOf("isVip")!=-1){
+            if(lineTxt.indexOf("true")!=-1)       curUser.isVip =true;
+            else curUser.isVip=false;
+            users.add(curUser);
+        }
+        if(lineTxt.equals("}")){
+           for(int i =0 ; i <users.size();i++){
+               System.out.println(users.elementAt(i));
+           }
+            System.out.println("*************");
+        }
+    }
     public Double Total(){
-
         double sum=0;
         for(int i=0;i<list.size();i++)
         {
-            sum+=list.elementAt(i).subTotal();
+            if(currentUser.isVip)sum+=list.elementAt(i).subTotalforVip();
+            else sum+=list.elementAt(i).subTotal();
         }
         return  sum;
     }
@@ -196,7 +246,8 @@ public  class readfile {
         double sv=0;
         for(int i=0;i<list.size();i++)
         {
-            sv+=list.elementAt(i).subSave();
+            if(currentUser.isVip) sv+=list.elementAt(i).subSaveforVip();
+            else sv+=list.elementAt(i).subSave();
         }
         return  sv;
     }
