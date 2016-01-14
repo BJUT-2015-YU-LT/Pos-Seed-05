@@ -14,7 +14,7 @@
     },
     'ITEM000002': {
         'name': '棉花糖',
-        'unit': '瓶',
+        'unit': '袋',
         'price': 3.00,
         'discount': 0.80,
         'vipDiscount': 0.5
@@ -32,31 +32,31 @@
     },
     'ITEM000005': {
         'name': '大卫龙',
-        'unit': '瓶',
+        'unit': '袋',
         'price': 3.00,
         'vipDiscount': 0.80
     },
     'ITEM000006': {
         'name': '德芙',
-        'unit': '瓶',
+        'unit': '条',
         'price': 6.80,
         'vipDiscount': 0.95
     },
     'ITEM000007': {
         'name': '双汇火腿肠',
-        'unit': '瓶',
+        'unit': '根',
         'price': 1.50,
         'vipDiscount': 0.90
     },
     'ITEM000008': {
         'name': '清风原木200抽',
-        'unit': '瓶',
+        'unit': '盒',
         'price': 2.80,
         'discount': 1,
     },
     'ITEM000009': {
         'name': '费列罗精装',
-        'unit': '瓶',
+        'unit': '盒',
         'price': 3.00,
         'discount': 0.80,
         'vipDiscount': 0.90
