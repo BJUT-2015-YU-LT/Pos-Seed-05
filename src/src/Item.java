@@ -2,6 +2,8 @@
  * Created by mrcai on 2016/1/5.
  */
 import java.text.DecimalFormat;
+import java.util.Objects;
+
 public class Item {
     DecimalFormat df =new DecimalFormat("0.00");
     String name;
@@ -67,4 +69,14 @@ public class Item {
     public String toString3() {//挥泪赠送
         return " 名称："+name+",\t数量："+number/3+unit ;
     }//挥泪赠送
+    Object[] getObjectforVip(){
+        return new Object[]{name,number,unit,price+"元",df.format(subTotalforVip())+"元"};
+    }
+    Object[] getObject(){
+        return new Object[]{name,number,unit,price+"元",df.format(subTotal())+"元"};
+    }
+    //"商品代号","名称","单位","单价","小计"+"会员价"+"活动"
+    Object[] getObject_forwarehouse(){
+        return new Object[]{barcode,name,unit,price+"元",df.format(subTotal()/number)+"元",df.format(subTotalforVip())+"元",promotion};
+    }
 }

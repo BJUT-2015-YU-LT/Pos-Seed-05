@@ -1,5 +1,4 @@
-import com.sun.org.apache.xerces.internal.impl.io.UTF8Reader;
-
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,9 +9,11 @@ import java.util.Date;
 import java.util.Vector;
 
 /**
- * Created by mrcai on 2016/1/5.
+ * Created by mrcai on 2016/1/14.
  */
-public  class readfile {
+public class table extends JTable {
+
+
     Vector<Item> list;
     Vector<Item> index;
     Vector<Item> promotion;
@@ -21,12 +22,9 @@ public  class readfile {
     User currentUser;
     Item curItem;
     int cur;
-    StringBuffer sb_tips=new StringBuffer();
-    Object[][] data;
-    Object[][] data_warehouse;
     DecimalFormat df =new DecimalFormat("0.00");
     final int  LISTSIZE=128;
-    readfile() {
+    table() {
         list = new Vector();
         index = new Vector();
         promotion = new Vector();
@@ -43,6 +41,7 @@ public  class readfile {
 
     public int readRequirement(String filePath,String isIndex) {
         try {
+
             String encoding = "GBK";
             File file = new File(filePath);
             if (file.isFile() && file.exists()) { //判断文件是否存在
@@ -68,13 +67,14 @@ public  class readfile {
         return 0;
     }
     public void  OutList(String lineTxt){
+
         if(lineTxt.equals("{")){
-            System.out.println("***商店购物清单***");sb_tips.append("***商店购物清单***\n");
+            System.out.println("***商店购物清单***");
             Date now = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");//可以方便地修改日期格式
             String tt = dateFormat.format( now );
-            System.out.printf("打印时间：%s\n",tt);sb_tips.append("打印时间："+tt+"\n");
-            System.out.println("----------------------");sb_tips.append("----------------------\n");
+            System.out.printf("打印时间：%s\n",tt);
+            System.out.println("----------------------");
             return;
         }
         if(lineTxt.indexOf("user")!=-1){
@@ -87,14 +87,8 @@ public  class readfile {
                     currentUser = new User(users.elementAt(i));break;
                 }
             }
-            if(currentUser.isVip){
-                System.out.printf("会员编号：%s\t 会员积分：%d 分\n",currentUser.code,currentUser.integral);
-                sb_tips.append("会员编号："+currentUser.code+"\t 会员积分："+currentUser.integral+" 分\n");
-            }
-            else{
-                System.out.println("当前为非会员");
-                sb_tips.append("当前为非会员");
-            }
+            if(currentUser.isVip)System.out.printf("会员编号：%s\t 会员积分：%d 分\n",currentUser.code,currentUser.integral);
+            else System.out.println("当前为非会员");
         }
         if(lineTxt.indexOf("ITEM")!=-1){
             curItem=new Item();
@@ -127,33 +121,22 @@ public  class readfile {
         }
 
         if(lineTxt.indexOf("]")!=-1){
-            data=new Object[list.size()][];
             for(int i=0;i<list.size();i++)
             {
-                if(currentUser.isVip)  {
-                    System.out.println(list.elementAt(i).toStringforVip());
-                    sb_tips.append(list.elementAt(i).toStringforVip()+"\n");
-                    data[i]=list.elementAt(i).getObjectforVip();
-                }
-                else{
-                    System.out.println(list.elementAt(i).toString());
-                    sb_tips.append(list.elementAt(i).toString()+"\n");
-                    data[i]=list.elementAt(i).getObject();
-                }
+                if(currentUser.isVip)  System.out.println(list.elementAt(i).toStringforVip());
+                else System.out.println(list.elementAt(i).toString());
             }
-            System.out.println("----------------------");sb_tips.append("----------------------\n");
-            System.out.println("挥泪赠送商品：");sb_tips.append("挥泪赠送商品：\n");
+            System.out.println("----------------------");
+            System.out.println("挥泪赠送商品：");
             for(int i=0;i<list.size();i++)
             {
-                if (list.elementAt(i).promotion) {
+                if (list.elementAt(i).promotion)
                     System.out.println(list.elementAt(i).toString3());
-                    sb_tips.append(list.elementAt(i).toString3()+"\n");
-                }
             }
-            System.out.println("----------------------");sb_tips.append("----------------------\n");
-            System.out.println("总计" + df.format(Total() - Save())+"（元）");sb_tips.append("总计" + df.format(Total() - Save())+"（元）\n");
-            System.out.println("节省"+df.format(Save())+"（元）");sb_tips.append("节省"+df.format(Save())+"（元）\n");
-            System.out.println("**********************");sb_tips.append("**********************\n");
+            System.out.println("----------------------");
+            System.out.println("总计" + df.format(Total() - Save())+"（元）");
+            System.out.println("节省"+df.format(Save())+"（元）");
+            System.out.println("**********************");
             currentUser.AddIntegral((int)(Total() - Save()));
             return;
         }
@@ -205,7 +188,7 @@ public  class readfile {
         }
         if(lineTxt.indexOf("promotion")!=-1&&lineTxt.indexOf("true")!=-1){
             if(curItem.vipDiscount==1)//会员商品不参与活动
-           curItem.promotion=false;
+                curItem.promotion=false;
             else curItem.promotion =true;
             //System.out.println(lineTxt);
             return;
@@ -219,11 +202,9 @@ public  class readfile {
             return;
         }
         if(lineTxt.equals("}")){
-            data_warehouse=new Object[index.size()][];
             for(int i=0;i<index.size();i++)
             {
                 System.out.println(index.elementAt(i).toString2());
-                data_warehouse[i]=index.elementAt(i).getObject_forwarehouse();
             }
             System.out.println("总计 "+cur+" （种）");
             System.out.println("**********************");
@@ -232,7 +213,7 @@ public  class readfile {
         }
     }
     public void OutVipList(String lineTxt){
-            if(lineTxt.indexOf("USER")==-1&&lineTxt.indexOf("{")!=-1){
+        if(lineTxt.indexOf("USER")==-1&&lineTxt.indexOf("{")!=-1){
             System.out.println("***Vip index***");
             return;
         }
@@ -254,9 +235,9 @@ public  class readfile {
             users.add(curUser);
         }
         if(lineTxt.equals("}")){
-           for(int i =0 ; i <users.size();i++){
-               System.out.println(users.elementAt(i));
-           }
+            for(int i =0 ; i <users.size();i++){
+                System.out.println(users.elementAt(i));
+            }
             System.out.println("*************");
         }
     }
@@ -278,4 +259,5 @@ public  class readfile {
         }
         return  sv;
     }
+
 }
