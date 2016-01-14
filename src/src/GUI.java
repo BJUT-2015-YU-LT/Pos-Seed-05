@@ -53,21 +53,21 @@ public class GUI implements ActionListener{
         frame.setResizable(false); //随意调整大小禁止
         frame.setContentPane(pane);
         frame.setVisible(true);
-        scroll_tips.setBounds(1000,50,300,600);
+        scroll_tips.setBounds(850,50,420,600);
         scroll_list.setBounds(10,50,800,500);
         scroll_warehous.setBounds(10,50,1000,600);
         label1.setBounds(1100, 10, 300, 40);
         label2.setBounds(533, 10, 300, 40);
         label3.setBounds(100,10,300,40);
         button1.setBounds(260, 10, 100, 40); //button1是仓库读取
-        bt_scan.setBounds(400, 580, 250, 40); //bt_scan是商店仓库清单读取
-        bt_balance.setBounds(666, 580, 250, 40); //bt_balance是确定按钮
+        bt_scan.setBounds(200, 580, 250, 40); //bt_scan是商店仓库清单读取
+        bt_balance.setBounds(466, 580, 250, 40); //bt_balance是确定按钮
         button1.addActionListener(this); // 添加事件处理
         bt_scan.addActionListener(this); // 添加事件处理
         bt_balance.addActionListener(this); // 添加事件处理
         con.add(label1);
         con.add(label2);
-        con.add(label3);
+        con2.add(label3);
 
         con.add(bt_scan);
         con.add(bt_balance);
