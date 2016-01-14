@@ -2,6 +2,7 @@
  * Created by mrcai on 2016/1/14.
  */
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +34,7 @@ public class GUI implements ActionListener{
     GUI(){
         R.readRequirement("requirement5-index.txt","index");
         R.readRequirement("requirement5-vipList.txt","vipList");
-        R.readRequirement("requirement5-list.txt","list");
+        //R.readRequirement("requirement5-list.txt","list");
 
         String[] warehouse_headers = {"商品代号","名称","单位","单价","小计","会员价","活动"};
         Object[][]data_warehouse=R.data_warehouse;
@@ -41,8 +42,9 @@ public class GUI implements ActionListener{
         scroll_warehous=new JScrollPane(table_warehouse);
 
         String[] list_headers = {"名称","数量","单位","单价","小计"};
-        Object[][] data_list=R.data;
+        Object[][] data_list=new Object[0][5];
         table_list=new JTable(data_list,list_headers);
+        table_list.setEnabled(false);
         scroll_list = new JScrollPane(table_list);
 
 
@@ -50,14 +52,14 @@ public class GUI implements ActionListener{
         double ly=Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         frame.setLocation(new Point((int)(lx/2)-683,(int)(ly/2)-383));
         frame.setSize(1366,732);
-        frame.setResizable(false); //随意调整大小禁止
+        //frame.setResizable(false); //随意调整大小禁止
         frame.setContentPane(pane);
         frame.setVisible(true);
         scroll_tips.setBounds(850,50,420,600);
         scroll_list.setBounds(10,50,800,500);
         scroll_warehous.setBounds(10,50,1000,600);
-        label1.setBounds(1100, 10, 300, 40);
-        label2.setBounds(533, 10, 300, 40);
+        label1.setBounds(1000, 10, 300, 40);
+        label2.setBounds(10, 10, 300, 40);
         label3.setBounds(100,10,300,40);
         button1.setBounds(260, 10, 100, 40); //button1是仓库读取
         bt_scan.setBounds(200, 580, 250, 40); //bt_scan是商店仓库清单读取
@@ -85,12 +87,20 @@ public class GUI implements ActionListener{
         }
         if(e.getSource().equals(bt_scan))
         {
-
+            R.readRequirement("requirement5-list.txt","list");
+            String[] list_headers = {"名称","数量","单位","单价","小计"};
+            Object[][] data_list=R.data;
+            DefaultTableModel dtm = new DefaultTableModel(data_list,list_headers);
+            table_list.setModel(dtm);
+            dtm.fireTableStructureChanged();// JTable刷新结构
+            dtm.fireTableDataChanged();// 刷新JTable数据
         }
         if(e.getSource().equals(bt_balance))//结账
         {
-            tips.append(R.sb_tips.toString());
-            tips.append("…………正在打印…………\n");
+            R.AddIntegral();
+            tips.setText(R.sb_tips.toString());
+            tips.append("\n…………正在打印…………\n");
         }
     }
+
 }

@@ -22,8 +22,8 @@ public  class readfile {
     Item curItem;
     int cur;
     StringBuffer sb_tips=new StringBuffer();
-    Object[][] data;
-    Object[][] data_warehouse;
+    Object[][] data=new Object[0][];
+    Object[][] data_warehouse=new Object[0][];
     DecimalFormat df =new DecimalFormat("0.00");
     final int  LISTSIZE=128;
     readfile() {
@@ -122,7 +122,6 @@ public  class readfile {
                 }
             }
             System.out.println("Not found:"+curItem.toString2());
-
             return;
         }
 
@@ -154,9 +153,11 @@ public  class readfile {
             System.out.println("总计" + df.format(Total() - Save())+"（元）");sb_tips.append("总计" + df.format(Total() - Save())+"（元）\n");
             System.out.println("节省"+df.format(Save())+"（元）");sb_tips.append("节省"+df.format(Save())+"（元）\n");
             System.out.println("**********************");sb_tips.append("**********************\n");
-            currentUser.AddIntegral((int)(Total() - Save()));
             return;
         }
+    }
+    public void AddIntegral(){
+        currentUser.AddIntegral((int)(Total() - Save()));
     }
     public void  OutIndex(String lineTxt){
         if(lineTxt.equals("{")){

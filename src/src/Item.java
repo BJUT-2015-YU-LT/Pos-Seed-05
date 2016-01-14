@@ -57,10 +57,10 @@ public class Item {
     }
     @Override
     public String toString() {//List
-        return "名称："+name+",\t数量："+number+unit+",单价："+df.format(price)+"（元），小计："+df.format(subTotal())+"（元）" ;
+        return "名称："+name+",数量："+number+unit+",单价："+df.format(price)+"（元），小计："+df.format(subTotal())+"（元）" ;
     }
     public String toStringforVip() {//List
-        return "名称："+name+",\t数量："+number+unit+",单价："+df.format(price)+"（元），小计："+df.format(subTotalforVip())+"（元）" ;
+        return "名称："+name+",数量："+number+unit+",单价："+df.format(price)+"（元），小计："+df.format(subTotalforVip())+"（元）" ;
     }
     public String toString2() {//目录
         return "Barcode:"+barcode+"\t名称："+name+",\t数量："+number+unit+",\t单价："+df.format(price)+"元\t小计："+df.format(subTotal())+"元"+"\t会员价："+df.format(subTotalforVip())+"元"+"\t活动："+promotion ;
