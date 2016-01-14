@@ -93,7 +93,7 @@ public  class readfile {
             }
             else{
                 System.out.println("当前为非会员");
-                sb_tips.append("当前为非会员");
+                sb_tips.append("当前为非会员\n");
             }
         }
         if(lineTxt.indexOf("ITEM")!=-1){
