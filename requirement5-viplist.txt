@@ -1,0 +1,14 @@
+{
+    'USER0001': {
+        "name": '蔡颖荣',24,
+        "isVip": true
+    },
+    'USER0002': {
+        "name": '秦涛',0,
+        "isVip": false
+    },
+    'USER0003': {
+        "name": '周定达',532,
+        "isVip": true
+    }
+}

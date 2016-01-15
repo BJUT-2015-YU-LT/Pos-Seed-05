@@ -33,7 +33,7 @@ public class User {
                         if(lineTxt.indexOf(name)!=-1) {
                             if(integral>500) integral+=(money/5) *5;
                             else if(integral>200) integral+=(money/5) *3;
-                            else if(integral>0) integral+=(money/5) *1;
+                            else if(integral>=0) integral+=(money/5) *1;
                             replaceTxtByStr(lineTxt,lineTxt.split(",")[0]+","+integral+",");
                         }
                 }
